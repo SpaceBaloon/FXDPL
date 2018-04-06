@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Basic implementation of {@code Wrapper}.
  * 
  * @author Belkin Sergei.
- * @param <T> returned type.
+ * @param <T> returning type.
  * @param <C> type of class that will be instatianted.
  */
 public class DefaultWrapper<T, C extends IEntity> implements Wrapper<T, C> {
@@ -93,7 +94,7 @@ public class DefaultWrapper<T, C extends IEntity> implements Wrapper<T, C> {
             }
         }
     }
-
+    
     /**
      * This implementation does not throw any exceptions.
      * 
