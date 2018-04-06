@@ -172,7 +172,7 @@ public class DataSourceTest {
     public void testSomeMethod() throws SQLException {
         System.out.println( "############ TEST SOME METHOD ############" );
         final String QUERY_TEXT = "SELECT FIRST(1) * FROM DOCS";
-        Wrapper<IDoc, Doc> wrapper = new DefaultWrapper<>();
+        Wrapper<IDoc> wrapper = new DefaultWrapper<>();
         BasicDAO<IDoc> dataObject = new BasicDAO<IDoc>(  ) {            
             @Override
             public Wrapper getWrapper() {
