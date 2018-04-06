@@ -1,6 +1,5 @@
 package data.wrappers;
 
-import data.entities.IEntity;
 import data.entities.ILookupHandler;
 import java.sql.ResultSet;
 
@@ -12,14 +11,13 @@ import java.sql.ResultSet;
  * @author Belkin Sergei.
  * @param <T> type of lookup object that will be returned.
  * Lookup data must be reflected at last level of inheritance.
- * @param <C> 
  */
-public class LookupWrapper<T, C extends IEntity> extends DefaultWrapper<T, C> {
+public class LookupWrapper<T> extends DefaultWrapper<T> {
 
     private T result;
     private final ILookupHandler<T> handler;
     @Override
-    protected T getInstance( Class<C> cls ) throws InstantiationException, IllegalAccessException {
+    protected T getInstance( Class<?> cls ) throws InstantiationException, IllegalAccessException {
         return result;
     }
 
@@ -28,19 +26,18 @@ public class LookupWrapper<T, C extends IEntity> extends DefaultWrapper<T, C> {
     }    
     
     @Override
-    public T wrap( ResultSet rs, Class<C> cls ) {
+    public T wrap( ResultSet rs, Class<?> cls ) {
         try {
-            result = ( T ) cls.newInstance();
-            
+            result = super.getInstance( cls );
             Class<?> superCls = result.getClass().getSuperclass();
             if( !superCls.getName().equals( "java.lang.Object" ) )
-                super.wrap(rs, ( Class<C> ) superCls);
+                super.wrap(rs, superCls);
             /**
              * For lookup data.
              */
             if( handler != null )
                 handler.handleData( rs, result );
-        } catch( IllegalAccessException | InstantiationException ex ) {
+        } catch( Exception ex ) {
             ex.printStackTrace();
         }
         return result;

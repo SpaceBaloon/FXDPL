@@ -13,9 +13,8 @@ import java.util.List;
  * 
  * @author Belkin Sergei.
  * @param <T> returning type.
- * @param <C> type of class that will be instatianted.
  */
-public class DefaultWrapper<T, C extends IEntity> implements Wrapper<T, C> {
+public class DefaultWrapper<T> implements Wrapper<T> {
     
     private boolean needInitProperties = true;
     private final List<IDBPropertyReference> properties = new ArrayList<>();
@@ -25,13 +24,16 @@ public class DefaultWrapper<T, C extends IEntity> implements Wrapper<T, C> {
         return properties;
     }
     
-    protected T getInstance( Class<C> cls ) 
+    protected T getInstance( Class<?> cls ) 
             throws InstantiationException, IllegalAccessException {
-        return ( T ) cls.newInstance();
+        T result = (T) cls.newInstance();
+        if( ! (result instanceof IEntity) )
+            throw new IllegalArgumentException( "Instatiated class must implement IEntity interface." );
+        return result;
     }
     
-    protected IDBPropertyReference getPropertyRef( T result, Field field, Class<?> cls ) {
-        DBPropertyReference res = new DBPropertyReference( field, cls );
+    protected IDBPropertyReference getPropertyRef( T result, Field field, Class<?> cls ) {        
+        DBPropertyReference res = new DBPropertyReference( field, cls );        
         res.initDBProperty( ( IEntity ) result );
         return res;
     }
@@ -103,7 +105,7 @@ public class DefaultWrapper<T, C extends IEntity> implements Wrapper<T, C> {
      * @return <T> It is allowed to return {@code null} value.
      */
     @Override
-    public T wrap( ResultSet rs, Class<C> cls ) {                
+    public T wrap( ResultSet rs, Class<?> cls ) {               
         T result = null;
         try {
             result = getInstance( cls );
