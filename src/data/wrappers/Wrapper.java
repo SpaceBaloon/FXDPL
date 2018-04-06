@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.util.List;
 
 /**
+ * TODO: it's needed to rid of type {@code C} as parameterization of this interface.
+ * This wrapper is needed when you use IEntity interface to provide info about DB fields.
  *
  * @author Belkin Sergei
  * @param <T> type that reflect structure of retrieved data.
